@@ -1,9 +1,13 @@
 import React, { useState, useRef } from 'react';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
 import Title from './components/Title';
-import List from './components/List';
 import Address from './components/Address';
+
+import Index from './pages/Index';
+import About from './pages/About';
+import Users from './pages/Users';
 
 const rooState = {
   restaurants: ["deck", "favorita", "meat-chopper"],
@@ -13,6 +17,19 @@ const rooState = {
     city: "São Paulo"
   }
 }
+
+
+// function Index() {
+//   return <h2>Home</h2>;
+// }
+//
+// function About() {
+//   return <h2>About</h2>;
+// }
+//
+// function Users() {
+//   return <h2>Users</h2>;
+// }
 
 function App() {
   const [restaurants, setRestaurants] = useState(rooState.restaurants);
@@ -32,34 +49,55 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <Title text="Meu pastel eh mais barato" />
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about/">About</Link>
+            </li>
+            <li>
+              <Link to="/users/">Users</Link>
+            </li>
+          </ul>
+        </nav>
 
-        <List items={restaurants} />
+        <Route path="/" exact component={() => <Index restaurants={restaurants} />} />
+        <Route path="/about/" component={About} />
+        <Route path="/users/" component={Users} />
 
-        <input ref={addRestaurantInput} type="text" className="restaurant" />
-        <button type="button" onClick={() => addRestaurant()}>add restaurant</button>
+        <div className="App">
+          <header className="App-header">
+            <Title text="Meu pastel eh mais barato" />
 
-        <Address data={address} />
-        <input ref={updateZipcodeInput} type="text" className="zipcode-updater" />
-        <button type="button" onClick={() => updateZipcode()}>update</button>
+            <input ref={addRestaurantInput} type="text" className="restaurant" />
+            <button type="button" onClick={() => addRestaurant()}>add restaurant</button>
 
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+            <Address data={address} />
+            <input ref={updateZipcodeInput} type="text" className="zipcode-updater" />
+            <button type="button" onClick={() => updateZipcode()}>update</button>
 
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React with Ion
-        </a>
-      </header>
-    </div>
+            <img src={logo} className="App-logo" alt="logo" />
+            <p>
+              Edit <code>src/App.js</code> and save to reload.
+            </p>
+
+            <a
+              className="App-link"
+              href="https://reactjs.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              >
+              Learn React with Ion
+            </a>
+          </header>
+        </div>
+      </div>
+    </Router>
+
   );
 }
 
