@@ -4,21 +4,24 @@ import logo from './logo.svg';
 import './App.css';
 import Title from './components/Title';
 import Address from './components/Address';
+import Users from './components/Users';
 
 import Index from './pages/Index';
 import About from './pages/About';
-import Users from './pages/Users';
+import UsersPage from './pages/Users';
 
 const rooState = {
   address: {
     street: "Rua tal",
     zipcode: "02969000",
     city: "São Paulo"
-  }
+  },
+  users: []
 }
 
 function App() {
   const [address, setAddress] = useState(rooState.address);
+  const [users, setUsers] = useState(rooState.users);
 
   const updateZipcodeInput = useRef(null);
 
@@ -26,10 +29,17 @@ function App() {
     setAddress(Object.assign({}, address, { zipcode: updateZipcodeInput.current.value }));
   }
 
+  const loadUsers = async () => {
+    const result = await fetch("http://dummy.restapiexample.com/api/v1/employees");
+    const data = await result.json();
+
+    setUsers([...users, ...data])
+  }
+
   return (
     <Router>
       <div>
-        <nav class="navbar">
+        <nav className="navbar">
           <ul>
             <li>
               <Link to="/">Home</Link>
@@ -38,16 +48,20 @@ function App() {
               <Link to="/about/">About</Link>
             </li>
             <li>
-              <Link to="/users/">Users</Link>
+              <Link to="/users/">UsersPage</Link>
             </li>
           </ul>
         </nav>
 
         <Route path="/" exact component={() => <Index />} />
         <Route path="/about/" component={About} />
-        <Route path="/users/" component={Users} />
+        <Route path="/users/" component={UsersPage} />
 
         <div className="App">
+          <button type="button" onClick={() => loadUsers()}>update</button>
+
+          <Users users={users} />
+
           <header className="App-header">
             <Title text="React" />
 
@@ -59,6 +73,7 @@ function App() {
             <p>
               Edit <code>src/App.js</code> and save to reload.
             </p>
+
 
             <a
               className="App-link"
